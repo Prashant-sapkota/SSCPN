@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ne" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>वैज्ञानिक समाजवादी कम्युनिस्ट पार्टी, नेपाल</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@200;300;400;500;600;700;800&display=swap');
+
+      @font-face {
+        font-family: 'Yatra One';
+        src: url('/fonts/YatraOne-Regular.ttf?v=1') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Alkatra';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url('/fonts/Alkatra.ttf') format('truetype');
+      }
+      
+      :root {
+        --font-heading: 'Yatra One', 'Mangal', sans-serif;
+        --font-body: 'Google Sans', sans-serif;
+      }
+
+      body {
+        font-family: var(--font-body);
+        font-size: 1.125rem; /* Adjusted to 18px for better readability without being too large */
+        line-height: 1.75;
+        color: #171717; /* Neutral 900 */
+        background-color: #f5f5f5; /* Neutral 100 */
+      }
+      
+      h1, h2, h3, h4, h5, h6, .font-serif {
+        font-family: var(--font-heading) !important;
+      }
+      
+      p, li, input, textarea, select, strong, b, button, .font-sans {
+        font-family: var(--font-body) !important;
+      }
+      
+      a {
+        font-family: var(--font-body) !important;
+      }
+
+      /* Global No-Border-Radius Override */
+      * {
+        border-radius: 0 !important;
+      }
+
+      /* Sleeker Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #991b1b; 
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #7f1d1d; 
+      }
+
+      /* Utility to hide scrollbar but allow scrolling */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+      }
+
+      /* Custom Animations */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in-up {
+        animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      
+      /* Marquee Animation for OrgSlider */
+      .animate-marquee {
+        animation: marquee 35s linear infinite; /* Slowed down for readability */
+      }
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-neutral-100 text-neutral-900 antialiased selection:bg-red-200 selection:text-red-900">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

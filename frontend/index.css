@@ -1,0 +1,271 @@
+:root {
+  --surface: #ffffff;
+  --ink: #171717;
+  --muted-line: rgba(38, 38, 38, 0.14);
+  --accent: #991b1b;
+}
+
+body {
+  background: radial-gradient(circle at 8% 0%, rgba(153, 27, 27, 0.05), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #fcfcfb 100%);
+  color: var(--ink);
+}
+
+.ambient-flare {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  opacity: 0.2;
+  animation: ambientDrift 22s ease-in-out infinite alternate;
+}
+
+.ambient-blob-1 {
+  width: min(34vw, 420px);
+  height: min(34vw, 420px);
+  background: radial-gradient(circle at 30% 30%, rgba(190, 24, 93, 0.22), rgba(190, 24, 93, 0));
+  top: 8%;
+  left: -8%;
+  animation-duration: 26s;
+}
+
+.ambient-blob-2 {
+  width: min(28vw, 360px);
+  height: min(28vw, 360px);
+  background: radial-gradient(circle at 50% 50%, rgba(153, 27, 27, 0.2), rgba(153, 27, 27, 0));
+  top: 40%;
+  right: -6%;
+  animation-duration: 20s;
+}
+
+.ambient-blob-3 {
+  width: min(24vw, 300px);
+  height: min(24vw, 300px);
+  background: radial-gradient(circle at 60% 40%, rgba(244, 63, 94, 0.18), rgba(244, 63, 94, 0));
+  bottom: -4%;
+  left: 34%;
+  animation-duration: 24s;
+}
+
+.ambient-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba(153, 27, 27, 0.25);
+  animation: ambientFloat 14s ease-in-out infinite;
+}
+
+.ambient-dot-1 {
+  top: 24%;
+  left: 18%;
+  animation-delay: 0s;
+}
+
+.ambient-dot-2 {
+  top: 62%;
+  right: 14%;
+  animation-delay: 2s;
+}
+
+.ambient-dot-3 {
+  bottom: 18%;
+  left: 62%;
+  animation-delay: 4s;
+}
+
+.site-main,
+#contact,
+nav,
+header,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes ambientDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(18px, -12px, 0) scale(1.08);
+  }
+}
+
+@keyframes ambientFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.22;
+  }
+  50% {
+    transform: translateY(-14px);
+    opacity: 0.45;
+  }
+}
+
+@media (max-width: 768px) {
+  .ambient-blob {
+    opacity: 0.12;
+  }
+
+  .ambient-dot {
+    opacity: 0.16;
+  }
+}
+
+/* Flatten obvious nested boxes and keep pages visually consistent. */
+main [class*='bg-neutral-50'],
+main [class*='bg-neutral-100'],
+main [class*='bg-gray-50'] {
+  background-color: var(--surface) !important;
+}
+
+main [class*='border-gray-100'],
+main [class*='border-gray-200'],
+main [class*='border-gray-300'] {
+  border-color: var(--muted-line) !important;
+}
+
+/* Remove most decorative borders; keep only intentional strong separators. */
+.site-main [class*='border'] {
+  border-color: transparent !important;
+}
+
+.site-main [class*='border-t-8'],
+.site-main [class*='border-red-800'] {
+  border-color: var(--accent) !important;
+}
+
+main [class*='shadow-'] {
+  box-shadow: none !important;
+}
+
+/* Keep deep intent sections untouched (hero/CTA dark blocks). */
+main [class*='bg-red-950'],
+main [class*='bg-gray-900'],
+main [class*='bg-red-800'] {
+  box-shadow: none !important;
+}
+
+/* Add an editorial rhythm instead of rigid, traditional stacking. */
+.site-main section {
+  position: relative;
+}
+
+.site-main section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: clamp(0.5rem, 1.8vw, 1.5rem);
+  width: clamp(2rem, 4vw, 3.75rem);
+  height: 1px;
+  background: rgba(153, 27, 27, 0.35);
+}
+
+.site-main section:nth-of-type(2n) {
+  transform: translateX(clamp(0px, 0.8vw, 14px));
+}
+
+.site-main section:nth-of-type(2n + 1) {
+  transform: translateX(clamp(-14px, -0.8vw, 0px));
+}
+
+@media (max-width: 1024px) {
+  .site-main section:nth-of-type(2n),
+  .site-main section:nth-of-type(2n + 1) {
+    transform: none;
+  }
+
+  .site-main section::before {
+    left: 0.75rem;
+    width: 2rem;
+  }
+}
+
+/* Home page normalization: tighter spacing and consistent button borders. */
+.home-page > section {
+  padding-top: 3.5rem !important;
+  padding-bottom: 3.5rem !important;
+}
+
+.home-page > section#home {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.home-page button,
+.home-page a[class*='px-'][class*='py-'] {
+  border: 1px solid rgba(107, 114, 128, 0.45) !important;
+}
+
+.home-page h2,
+.home-page h3 {
+  letter-spacing: normal !important;
+}
+
+.home-page p {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.home-page h1 {
+  letter-spacing: normal !important;
+}
+
+@media (max-width: 768px) {
+  .home-page > section {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  .home-page p {
+    font-size: 0.95rem;
+  }
+}
+
+@font-face {
+  font-family: 'Aakriti';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Aakriti.ttf?v=1') format('truetype');
+}
+
+@font-face {
+  font-family: 'Alkatra';
+  src: url('/fonts/Alkatra.ttf?v=1') format('truetype');
+}
+
+.font-alkatra {
+  font-family: 'Alkatra', 'sans-serif' !important;
+}
+
+.font-custom {
+  font-family: 'Yatra One', 'Mangal', sans-serif !important;
+}
+
+.title-anek {
+  font-family: 'Yatra One', 'Mangal', sans-serif !important;
+}
+
+
+/* Subtle readability tuning: looser leading on large titles, tighter tracking on small text. */
+h1,
+h2,
+h3 {
+  line-height: 1.24 !important;
+}
+
+.text-xs,
+.text-sm,
+.text-base,
+small {
+  letter-spacing: 0.01em;
+}
