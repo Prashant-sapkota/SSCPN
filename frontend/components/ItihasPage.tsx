@@ -1,6 +1,6 @@
 
 import React, { useRef } from 'react';
-import { ChevronLeft, ChevronRight, Globe, MapPin, History, UserPlus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Globe, MapPin, History } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const globalHistory = [
@@ -91,7 +91,7 @@ const ItihasPage: React.FC = () => {
   const globalScrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
+  const scroll = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
     if (ref.current) {
       const scrollAmount = 400;
       ref.current.scrollBy({
@@ -105,33 +105,46 @@ const ItihasPage: React.FC = () => {
     <div className="bg-white min-h-screen">
       
       {/* 1. MASTHEAD */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-16">
+      <div className="relative text-white border-b border-gray-800 overflow-hidden pb-10 bg-black">
+        <div className="absolute inset-0 bg-[url('/marx-lenin.png')] bg-cover bg-center bg-no-repeat opacity-100"></div>
+        <div className="absolute inset-0 bg-black/70"></div>
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-20">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-             <div className="flex items-center text-red-700 font-bold uppercase tracking-widest text-sm mb-4">
-                <History size={18} className="mr-2" />
-                <span>अध्ययन सामग्री</span>
-             </div>
-             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 font-serif leading-tight mb-4">
+             <h1 className="text-4xl md:text-6xl font-bold text-white font-['Google_Sans'] leading-tight mb-6 drop-shadow-xl">
                इतिहास: संघर्ष र क्रान्ति
              </h1>
-             <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
+             <p className="text-lg md:text-xl text-red-200/90 leading-relaxed max-w-2xl mx-auto">
                विश्व कम्युनिष्ट आन्दोलनका पाठहरू र नेपाली क्रान्तिको उतारचढावपूर्ण यात्रा।
              </p>
+
+             <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+               <div className="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl px-6 py-5 shadow-xl transition-transform duration-500 hover:-translate-y-1">
+                 <p className="text-sm uppercase tracking-normal text-red-200">सम्प्रदाय</p>
+                 <p className="mt-3 text-3xl font-bold">विश्वव्यापी</p>
+               </div>
+               <div className="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl px-6 py-5 shadow-xl transition-transform duration-500 hover:-translate-y-1">
+                 <p className="text-sm uppercase tracking-[0.25em] text-red-200">देशीय संघर्ष</p>
+                 <p className="mt-3 text-3xl font-bold">नेपाली आन्दोलन</p>
+               </div>
+               <div className="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl px-6 py-5 shadow-xl transition-transform duration-500 hover:-translate-y-1">
+                 <p className="text-sm uppercase tracking-[0.25em] text-red-200">सन्देश</p>
+                 <p className="mt-3 text-3xl font-bold">वैज्ञानिक समाजवाद</p>
+               </div>
+             </div>
           </div>
         </div>
       </div>
 
       {/* 2. GLOBAL TIMELINE */}
-      <section className="py-20 bg-white border-b border-gray-200 overflow-hidden relative">
+      <section className="py-5 pt-10 bg-white border-b border-gray-200 overflow-hidden relative">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16">
           
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center justify-between mt-10 mb-12">
             <div className="flex items-center">
               <div className="bg-red-800 p-3 rounded-full mr-4 text-white">
                 <Globe size={24} />
               </div>
-              <h2 className="text-3xl font-bold font-serif text-gray-900">
+              <h2 className="text-3xl font-bold font-['Google_Sans'] text-gray-900">
                 विश्व कम्युनिष्ट आन्दोलन
               </h2>
             </div>
@@ -144,7 +157,7 @@ const ItihasPage: React.FC = () => {
           {/* Timeline Container */}
           <div 
             ref={globalScrollRef}
-            className="flex overflow-x-auto pb-20 pt-10 no-scrollbar snap-x snap-mandatory relative"
+            className="flex overflow-x-auto  pt-10 no-scrollbar snap-x snap-mandatory relative"
           >
             {/* Center Line */}
             <div className="absolute top-1/2 left-0 w-[200%] h-1 bg-gray-200 -translate-y-1/2 z-0"></div>
@@ -207,7 +220,7 @@ const ItihasPage: React.FC = () => {
             <div className="bg-neutral-800 p-3 rounded-full mr-4 text-white">
               <MapPin size={24} />
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold font-serif text-gray-900">
+            <h2 className="text-3xl md:text-5xl font-bold font-['Google_Sans'] text-gray-900">
               नेपालको कम्युनिष्ट आन्दोलन
             </h2>
           </div>
@@ -241,7 +254,7 @@ const ItihasPage: React.FC = () => {
                         <div className="w-12 h-1 bg-red-800 mr-4"></div>
                         <span className="text-red-800 font-bold uppercase tracking-widest text-sm">ऐतिहासिक कालखण्ड</span>
                       </div>
-                      <h3 className="text-3xl font-bold text-gray-900 mb-6 font-serif leading-tight">
+                      <h3 className="text-3xl font-bold text-gray-900 mb-6 font-['Google_Sans'] leading-tight">
                         {item.title}
                       </h3>
                       <p className="text-lg text-gray-600 leading-relaxed text-justify font-light">
@@ -267,7 +280,7 @@ const ItihasPage: React.FC = () => {
         </div>
         
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
-           <h2 className="text-3xl md:text-4xl font-bold font-serif text-white mb-4 leading-tight">
+           <h2 className="text-3xl md:text-4xl font-bold font-['Google_Sans'] text-white mb-4 leading-tight">
              दर्शक होइन, योद्धा बन्नुहोस्
            </h2>
            

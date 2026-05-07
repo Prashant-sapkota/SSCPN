@@ -1,5 +1,11 @@
 import React from 'react';
-import { BookOpen, Users, Target, Atom, ArrowRight } from 'lucide-react';
+import { VenetianMask , Users, Atom, ArrowRight, Star, Shield, Landmark } from 'lucide-react';
+import { motion } from 'motion/react';
+import SectionHeader from '../components/SectionHeader';
+import mahobadImage from '../assets/images/mahobad.png';
+import lelinbadImage from '../assets/images/lelinbad.png';
+import karlImage from '../assets/images/karl.png';
+import atomImage from '../assets/images/atom.png';
 
 const AboutPage: React.FC = () => {
   const toNepaliNumber = (num: number) =>
@@ -7,101 +13,168 @@ const AboutPage: React.FC = () => {
       .toString()
       .replace(/\d/g, (digit) => '०१२३४५६७८९'[Number(digit)]);
 
-  return (
-    <div className="bg-white min-h-screen">
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 mt-12 space-y-24 pb-24">
-        
-        {/* 2. INTRODUCTION (Short & To the Point) */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center bg-white">
-          <div className="relative h-[500px] w-full overflow-hidden rounded-sm shadow-xl">
-             <img 
-               src="https://picsum.photos/seed/rally_about/800/1000" 
-               alt="Party Rally" 
-               className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700"
-             />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-             <div className="absolute bottom-10 left-10 text-white">
-                <p className="font-bold text-xl uppercase tracking-widest">निरन्तर क्रान्ति</p>
-             </div>
-          </div>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
 
-          <div>
-            <h2 className="text-4xl lg:text-5xl font-bold font-serif text-gray-900 mb-8 leading-tight">
-              वैज्ञानिक समाजवादतर्फको यात्रा
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.6 }
+    }
+  };
+
+  return (
+    <div className="bg-white min-h-screen pt-20">
+      <div className="max-w-screen-2xl mx-auto px-2 sm:px-4 lg:px-6 space-y-12 lg:space-y-16 pb-10">
+        
+        {/* 1. HERO / INTRODUCTION */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="relative aspect-[3/4] lg:aspect-video xl:aspect-[4/3] overflow-hidden shadow-2xl rounded-sm">
+              <img 
+                src="https://images.unsplash.com/photo-1531266752426-aad472b7bdf4?auto=format&fit=crop&q=80&w=1200" 
+                alt="Movement and People" 
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-red-950/90 via-red-900/10 to-transparent pointer-events-none"></div>
+              
+              {/* Floating Badge */}
+              <div className="absolute bottom-8 left-8 bg-white/95 backdrop-blur-sm p-4 md:p-6 border border-gray-100 shadow-2xl">
+                 <p className="text-[9px] md:text-[10px] font-black uppercase tracking-normal text-red-900 mb-1">नारा</p>
+                 <p className="text-xl md:text-2xl font-['Google_Sans'] italic font-black text-gray-950">निरन्तर क्रान्ति</p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            className="space-y-8 md:space-y-12"
+          >
+            
+            <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-['Google_Sans'] text-gray-950 leading-[1.1] tracking-tighter italic">
+              वैज्ञानिक समाजवादतर्फको <span className="text-red-900">अविचलित यात्रा</span>
             </h2>
-            <div className="text-xl text-gray-700 leading-relaxed space-y-8 font-serif">
-              <p>
-                हामी <span className="text-red-800 font-bold">वैज्ञानिक समाजवादी कम्युनिस्ट पार्टी, नेपाल</span> हौं। हाम्रो स्थापनाको मूल उद्देश्य दलाल पुँजीवाद र सामन्ती अवशेषहरूको अन्त्य गरी नेपालमा वैज्ञानिक समाजवाद स्थापना गर्नु हो।
+            
+            <div className="space-y-6 md:space-y-8 text-base md:text-xl text-gray-600 leading-relaxed font-medium">
+              <p className="border-l-4 border-red-800 pl-6 md:pl-10">
+                हामी <span className="text-red-900 font-black">वैज्ञानिक समाजवादी कम्युनिस्ट पार्टी, नेपाल</span> हौं। हाम्रो स्थापनाको मूल उद्देश्य दलाल पुँजीवाद र सामन्ती अवशेषहरूको अन्त्य गरी नेपालमा वैज्ञानिक समाजवाद स्थापना गर्नु हो।
               </p>
-              <p>
-                इतिहासका विफलताहरूबाट पाठ सिक्दै र २१औं शताब्दीको विज्ञान–प्रविधिलाई आत्मसात गर्दै हामी नयाँ युगको क्रान्तिमा होमिएका छौं। हामी केवल सत्ता परिवर्तन होइन, उत्पादन सम्बन्ध र सामाजिक संरचनाको आमूल रूपान्तरण चाहन्छौं।
+              <p className="pl-6 md:pl-10 text-gray-500 italic">
+                इतिहासका विफलताहरूबाट पाठ सिक्दै र २१औं शताब्दीको विज्ञान–प्रविधिलाई आत्मसात गर्दै हामी नयाँ युगको क्रान्तिमा होमिएका छौं।
               </p>
             </div>
+          </motion.div>
+        </section>
+
+        {/* 2. STATS SECTION */}
+        <section className=" bg-gray-50/50 border-y pt-10 border-gray-100 -mx-4 sm:-mx-6 lg:-mx-12 px-4 sm:px-6 lg:px-12">
+          <div className="max-w-screen-xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+            {[
+              { val: "७७", label: "जिल्ला कमिटी" },
+              { val: "५०K+", label: "संगठित सदस्य" },
+              { val: "५००+", label: "पूर्णकालीन कार्यकर्ता" },
+              { val: "७", label: "जनवर्गीय संगठन" }
+            ].map((stat, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="text-center group"
+              >
+                <div className="text-5xl lg:text-7xl font-black text-gray-950 font-['Google_Sans'] mb-4 group-hover:text-red-900 transition-colors duration-500 italic">
+                  {stat.val}
+                </div>
+                <div className="text-[10px] font-black uppercase tracking-normal text-gray-400">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </section>
 
-        {/* 3. STATS SECTION (4 Columns) */}
-        <section className="bg-neutral-50 border-y border-gray-200 py-16">
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
-              <div className="p-4">
-                 <div className="text-5xl md:text-6xl font-bold text-red-800 font-serif mb-3">७७</div>
-                 <div className="text-sm font-bold uppercase tracking-widest text-gray-500">जिल्ला कमिटी</div>
-              </div>
-              <div className="p-4 md:border-l border-gray-200">
-                 <div className="text-5xl md:text-6xl font-bold text-red-800 font-serif mb-3">५०K+</div>
-                 <div className="text-sm font-bold uppercase tracking-widest text-gray-500">संगठित सदस्य</div>
-              </div>
-              <div className="p-4 md:border-l border-gray-200">
-                 <div className="text-5xl md:text-6xl font-bold text-red-800 font-serif mb-3">५००+</div>
-                 <div className="text-sm font-bold uppercase tracking-widest text-gray-500">पूर्णकालीन कार्यकर्ता</div>
-              </div>
-              <div className="p-4 md:border-l border-gray-200">
-                 <div className="text-5xl md:text-6xl font-bold text-red-800 font-serif mb-3">७</div>
-                 <div className="text-sm font-bold uppercase tracking-widest text-gray-500">जनवर्गीय संगठन</div>
-              </div>
-           </div>
-        </section>
-
-        {/* 4. IDEOLOGIES */}
-        <section className="bg-white">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
-             <div className="bg-white border border-gray-200 p-8 md:p-10">
-               <span className="text-red-700 font-bold uppercase tracking-widest text-sm mb-3 block">दर्शन</span>
-               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 font-serif mb-8 leading-tight">हाम्रो वैचारिक आधार</h2>
-
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* 3. IDEOLOGIES */}
+        <section className="bg-white pt-10 tracking-normal">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
+             <div className="space-y-5">
+               <SectionHeader title="हाम्रो वैचारिक आधार" />
+               
+               <motion.div 
+                  variants={containerVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                >
                  {[
-                   { icon: <BookOpen size={24} />, label: 'मार्क्सवाद' },
-                   { icon: <Users size={24} />, label: 'लेनिनवाद' },
-                   { icon: <Target size={24} />, label: 'माओवाद' },
-                   { icon: <Atom size={24} />, label: 'वैज्ञानिक समाजवाद' }
+                   { icon: <img src={karlImage} alt="मार्क्सवाद" className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm filter grayscale contrast-125 transition duration-500 group-hover:grayscale-0" />, label: 'मार्क्सवाद', desc: 'वैज्ञानिक विश्वदृष्टिकोण' },
+                   { icon: <img src={lelinbadImage} alt="लेनिनवाद" className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm filter grayscale contrast-125 transition duration-500 group-hover:grayscale-0" />, label: 'लेनिनवाद', desc: 'संगठन र सत्ता' },
+                   { icon: <img src={mahobadImage} alt="माओवाद" className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm filter grayscale contrast-125 transition duration-500 group-hover:grayscale-0" />, label: 'माओवाद', desc: 'निरन्तर क्रान्ति' },
+                   { icon: <img src={atomImage} alt="वैज्ञानिक समाजवाद" className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm filter grayscale contrast-125 transition duration-500 group-hover:grayscale-0" />, label: 'वैज्ञानिक समाजवाद', desc: 'भविष्यको मार्ग' }
                  ].map((item) => (
-                   <div key={item.label} className="border border-gray-200 bg-gray-50 p-5 flex items-center justify-between">
-                     <span className="text-xl md:text-2xl font-serif font-bold text-gray-900">{item.label}</span>
-                     <span className="text-red-700">{item.icon}</span>
-                   </div>
+                   <motion.div 
+                      key={item.label} 
+                      variants={itemVariants}
+                      className="group p-8 bg-white border border-gray-100 hover:border-slate-300 hover:shadow-2xl transition-all duration-500 overflow-hidden"
+                    >
+                     <div className="flex items-start gap-4 mb-6">
+                       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 border border-slate-200 text-slate-900 shadow-sm transition-colors duration-500 group-hover:bg-white group-hover:border-slate-300 group-hover:text-red-900">
+                         {item.icon}
+                       </div>
+                       <div className="min-w-0">
+                         <h3 className="text-2xl font-black font-['Google_Sans'] text-gray-950 group-hover:text-red-900 transition-colors italic leading-none">{item.label}</h3>
+                         <p className="text-[10px] font-black uppercase tracking-normal text-gray-400 leading-none mt-2">{item.desc}</p>
+                       </div>
+                     </div>
+                   </motion.div>
                  ))}
+               </motion.div>
+             </div>
+
+             <div className="relative h-[200px] md:h-[500px] md:h-auto overflow-hidden shadow-2xl group border border-gray-50 rounded-sm">
+               <img
+                 src="https://images.unsplash.com/photo-1493612276216-ee3925520721?auto=format&fit=crop&q=80&w=1200"
+                 alt="Ideology and Vision"
+                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                 referrerPolicy="no-referrer"
+               />
+               <div className="absolute inset-0 bg-red-900/60 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+               <div className="absolute bottom-12 left-12 right-12 text-white opacity-0 group-hover:opacity-100 translate-y-10 group-hover:translate-y-0 transition-all duration-700">
+                  <p className="text-4xl font-['Google_Sans'] font-black italic leading-tight">विचारको शक्तिले नै युग परिवर्तन गर्छ।</p>
                </div>
              </div>
-
-             <div className="relative min-h-[360px] overflow-hidden rounded-sm border border-gray-200">
-               <img
-                 src="/marx-lenin.png"
-                 alt="वैचारिक आधार"
-                 className="w-full h-full object-cover"
-               />
-             </div>
            </div>
         </section>
 
-        {/* 5. PARTY OBJECTIVES */}
-        <section className="bg-white p-6 md:p-10 lg:p-12">
-          <div className="text-center mb-14">
-            <span className="text-red-700 font-bold uppercase tracking-widest text-sm mb-4 block">दिशा</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 font-serif">पार्टीको उद्देश्य</h2>
-          </div>
+        {/* 4. PARTY OBJECTIVES */}
+        <section className="bg-white">
+          <SectionHeader title="पार्टीको उद्देश्य" />
 
-          <div className="space-y-0">
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="space-y-0"
+          >
             {[
               'भूमण्डलीकृत पुँजीवाद र त्यसबाट पालित-पोषित दलाल पुँजीवादी संसदीय व्यवस्थाका विरुद्ध सङ्घर्ष गर्दै सर्वहारा-श्रमिक र विस्थापित वर्गको सत्ता निर्माण गर्दै वैज्ञानिक समाजवादी क्रान्ति सम्पन्न गर्ने।',
               'सबै खालका शोषण, विभेद, दमन र उत्पीडनको अन्त्य गर्दै शोषणरहित वर्गविहीन समाज निर्माण गर्ने।',
@@ -115,44 +188,78 @@ const AboutPage: React.FC = () => {
               'पुँजीवादले ध्वस्त पारेको पर्यावरणको रक्षाका निम्ति सम्पूर्ण प्रयत्न गर्ने।',
               'भूमण्डलीकृत पुँजीवाद, नवउपनिवेशवाद, राष्ट्रिय आत्मसमर्पणवाद र राष्ट्रघाती शक्तिका विरुद्ध राष्ट्रिय स्वाधीनताको रक्षाका लागि आवश्यक पर्दा राष्ट्रिय प्रतिरोध युद्धको विकास गर्ने।'
             ].map((objective, index) => (
-              <div key={index} className="py-6 border-b border-gray-200 last:border-b-0">
-                <div className="flex items-center gap-4 md:gap-5">
-                  <div className="flex-shrink-0 text-4xl md:text-5xl font-bold font-sans text-red-800 leading-none min-w-[2.5rem]">
-                    {toNepaliNumber(index + 1)}
+              <motion.div 
+                key={index} 
+                variants={itemVariants}
+                className="group py-3 md:py-4 border-b border-gray-100 flex flex-col md:flex-row gap-6 lg:gap-5 items-start hover:bg-gray-50/50 px-4 transition-colors"
+              >
+                  <div className="flex-shrink-0 flex items-center justify-center w-16 h-16 bg-white border border-gray-100 group-hover:border-red-900 transition-colors duration-500 shadow-sm relative">
+                    <span className="text-3xl font-black font-['Google_Sans'] italic text-red-900 leading-none">{toNepaliNumber(index + 1)}</span>
+                    <div className="absolute inset-0 bg-red-900 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-5 transition-all duration-500 rounded-sm"></div>
                   </div>
-                  <p className="text-gray-800 text-lg leading-relaxed font-sans">{objective}</p>
-                </div>
-              </div>
+                  
+                  <div className="flex-1 space-y-4">
+                     <p className="text-gray-800 text-xl lg:text-2xl font-['Google_Sans'] italic group-hover:text-red-950 transition-colors leading-relaxed">
+                       {objective}
+                     </p>
+                  </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
       </div>
 
-      {/* 6. CTA SECTION */}
-      <section className="relative py-16 bg-red-950 text-white overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
-           <div className="absolute -top-24 -left-24 w-96 h-96 bg-black rounded-full mix-blend-multiply filter blur-3xl"></div>
-           <div className="absolute top-1/2 left-1/2 w-full h-full bg-red-600 rounded-full mix-blend-overlay filter blur-3xl"></div>
+      {/* 5. CTA SECTION */}
+      <section className="relative py-10 md:py-16 bg-red-950 text-white overflow-hidden">
+        {/* Background Texture */}
+        <div className="absolute inset-0 opacity-10">
+          <img src="https://images.unsplash.com/photo-1533158326339-7f3cf2404354?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover grayscale" referrerPolicy="no-referrer" />
         </div>
 
         <div className="max-w-screen-xl mx-auto px-4 relative z-10 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold font-serif mb-5 leading-tight">
-            इतिहास रच्ने अभियानमा सहभागी हुनुहोस्
+          {/* <div className="inline-flex items-center  bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 text-[10px] font-black uppercase tracking-normal mb-12">
+            तपाईंको आवश्यकता
+          </div> */}
+          
+          <h2 className="text-5xl md:text-6xl font-black font-['Google_Sans'] mb-10 leading-[0.9] tracking-tighter italic">
+            इतिहास रच्ने अभियानमा <br className="hidden md:block" /> <span className="text-red-500">सहभागी हुनुहोस्</span>
           </h2>
-          <p className="text-lg md:text-xl text-red-100 mb-7 max-w-3xl mx-auto font-light leading-relaxed">
+          
+          <p className="text-xl md:text-2xl text-red-100 mb-16 max-w-4xl mx-auto font-medium leading-relaxed opacity-80 italic">
             समाजवाद केवल एक विचार होइन, यो एक आन्दोलन हो। तपाईंको ऊर्जा, विचार र समर्पणले नै नयाँ नेपाल निर्माण गर्न सक्छ।
           </p>
           
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-             <button className="bg-white text-red-900 px-8 py-3 rounded-sm font-bold uppercase tracking-widest hover:bg-gray-100 transition-colors shadow-2xl flex items-center justify-center text-base">
-               सदस्यता लिनुहोस् <ArrowRight size={22} className="ml-3" />
-             </button>
-             <button className="bg-transparent border-2 border-red-300 text-white px-8 py-3 rounded-sm font-bold uppercase tracking-widest hover:bg-red-800 hover:border-red-800 transition-colors flex items-center justify-center text-base">
-               सम्पर्क गर्नुहोस्
-             </button>
+          <div className="flex flex-col sm:flex-row justify-center gap-6 items-center">
+             <motion.button 
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+               className="group relative border border-red-600 text-red-700 bg-white px-12 py-6 font-black uppercase tracking-normal text-[11px] shadow-2xl flex items-center overflow-hidden rounded-full transition-all duration-300 hover:bg-red-50 hover:-translate-y-0.5"
+             >
+               <span className="relative z-10 flex items-center gap-4">
+                 सदस्यता लिनुहोस् <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" />
+               </span>
+               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+             </motion.button>
+             <motion.button 
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+               className="group relative border-4 border-black  text-white bg-red-950 px-16 py-7 font-black uppercase tracking-normal text-[11px] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_12px_30px_rgba(0,0,0,0.28)] flex items-center rounded-full transition-all duration-300 hover:bg-white hover:text-red-700"
+             >
+               <span className="relative z-10 flex items-center gap-4">
+                 सम्पर्क गर्नुहोस् <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" />
+               </span>
+               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+             </motion.button>
           </div>
+        </div>
+
+        {/* Floating Icons for texture */}
+        <div className="absolute top-10 right-20 opacity-5 rotate-12">
+          <Shield size={200} />
+        </div>
+        <div className="absolute bottom-10 left-20 opacity-5 -rotate-12">
+          <Landmark size={200} />
         </div>
       </section>
 
