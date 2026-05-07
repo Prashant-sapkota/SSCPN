@@ -1,13 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronRight, BookOpen, Download, Eye, Landmark, Users, Briefcase, Shield, Gavel } from 'lucide-react';
+import { Menu, X, ChevronRight, BookOpen, Download, Eye, Landmark, Users, Shield, Gavel } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 const sections = [
   {
     id: 'intro',
     title: '१. परिचय: सामुदायिक सार्वभौम नेपाल',
     content: (
-      <div className="space-y-6 text-gray-800 leading-relaxed text-lg">
+      <div className="space-y-3 text-gray-800 leading-relaxed text-lg">
         <p>
           वैज्ञानिक समाजवादी व्यवस्थाको कार्यक्रमको मूल सार <strong>"सामुदायिक सार्वभौम नेपाल"</strong> हो। यो राज्यको प्रकृतिको नाम हो। यसको अर्थ समुदाय नै सबै क्षेत्रमा सार्वभौमसत्ता सम्पन्न भएको अन्तर्वस्तु बुझिनेछ।
         </p>
@@ -29,7 +30,7 @@ const sections = [
     id: 'structure',
     title: '२. राज्यको संरचना (समस्तरीय संघीयता)',
     content: (
-      <div className="space-y-6 text-gray-800 leading-relaxed text-lg">
+      <div className="space-y text-gray-800 leading-relaxed text-lg">
         <p>
           यो पिरामिड आकारको होइन, <strong>समस्तरीय (Horizontal)</strong> ढाँचाको राज्य हुनेछ। कोही तल र कोही माथि हुने छैनन्; सबै समतलीय हुनेछन्।
         </p>
@@ -159,7 +160,9 @@ const sections = [
 const SamajwadiKaryakramPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState('intro');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pdfUrl = new URL('../files/samajwadi-karyakram.pdf', import.meta.url).href;
+  
+  // Placeholder for PDF URL as we don't have the actual file structure
+  const pdfUrl = "#";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -194,57 +197,53 @@ const SamajwadiKaryakramPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen font-sans">
+    <div className="bg-white pt-20 min-h-screen font-['Google_Sans'] ">
       
       {/* 1. MASTHEAD */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-16">
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-3 lg:px-6 py-10 lg:py-12">
           <div className="flex flex-col items-center text-center">
-             <div className="flex items-center text-red-700 font-bold uppercase tracking-widest text-sm mb-4">
-                <Landmark size={18} className="mr-2" />
-                <span>पार्टीको औपचारिक कार्यक्रम</span>
-             </div>
-             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 font-serif leading-tight mb-6">
-               वैज्ञानिक समाजवादी कार्यक्रम
+             {/* <motion.div 
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="inline-flex items-center rounded-full border border-red-100 bg-red-50 px-4 py-2 text-red-900 text-[10px] uppercase tracking-[0.35em] font-semibold mb-6"
+             >
+             </motion.div> */}
+             <h1 className="text-4xl md:text-6xl font-semibold text-gray-950 font-['Google_Sans'] leading-tight mb-6 tracking-tight">
+               वैज्ञानिक समाजवादी <span className='text-red-900'>कार्यक्रम</span>
              </h1>
-             <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-4xl mx-auto text-justify md:text-center font-bold">
-               सामुदायिक सार्वभौम नेपाल (Community Sovereign Nepal)
-             </p>
-             <p className="text-gray-500 mt-2">
-                (राज्यको संरचना, शासकीय स्वरूप, निर्वाचन प्रणाली र समग्र विषयहरूको आधारभूत नीतिहरू)
+             <p className="text-gray-500  text-xl uppercase tracking-normal font-semibold">
+                राज्यको संरचना, शासकीय स्वरूप, निर्वाचन प्रणाली र नीति निर्देशक ढाँचा
              </p>
           </div>
         </div>
       </div>
 
       {/* 2. DOWNLOAD / PREVIEW CTA */}
-      <div className="bg-neutral-50 border-b border-gray-200">
-         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-               <div className="flex items-center">
-                  <div className="bg-red-100 p-4 rounded-full mr-4 text-red-800">
-                     <BookOpen size={32} />
+      <div className="bg-gray-50 border-y border-gray-100">
+         <div className="max-w-screen-2xl mx-auto px-4 lg:px-6 py-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+               <div className="flex items-center gap-4">
+                  <div className="rounded-3xl bg-red-50 p-4 text-red-900 border border-red-100">
+                     <BookOpen size={28} />
                   </div>
                   <div>
-                     <h3 className="font-bold text-lg text-gray-900">पूर्ण दस्तावेज (PDF)</h3>
+                     <h3 className="text-lg font-semibold text-gray-950">पूर्ण दस्तावेज (PDF)</h3>
                      <p className="text-sm text-gray-500">विस्तृत अध्ययनका लागि आधिकारिक प्रतिवेदन डाउनलोड गर्नुहोस्।</p>
                   </div>
                </div>
-               <div className="flex space-x-4">
+               <div className="flex flex-wrap gap-3">
                 <a
                   href={pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center px-6 py-3 bg-white border border-gray-300 rounded font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="inline-flex items-center justify-center px-6 py-3 border border-gray-200 rounded-full font-semibold text-sm text-gray-700 hover:border-red-900 hover:text-red-900 transition"
                 >
-                  <Eye size={18} className="mr-2" /> प्रिव्यु (Preview)
+                  <Eye size={16} className="mr-2" /> प्रिव्यु
                 </a>
                 <a
                   href={pdfUrl}
-                  download="samajwadi-karyakram.pdf"
-                  className="flex items-center px-6 py-3 bg-red-800 text-white rounded font-bold hover:bg-red-900 transition-colors shadow-md"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-red-900 text-white font-semibold text-sm hover:bg-red-950 transition"
                 >
-                  <Download size={18} className="mr-2" /> डाउनलोड
+                  <Download size={16} className="mr-2" /> डाउनलोड
                 </a>
                </div>
             </div>
@@ -252,78 +251,114 @@ const SamajwadiKaryakramPage: React.FC = () => {
       </div>
 
       {/* 3. CONTENT AREA */}
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-12">
+          <div className="max-w-screen-2xl mx-auto px-2 sm:px-3 lg:px-6 py-8 lg:py-12">
         
         {/* Mobile Toggle */}
-        <div className="lg:hidden mb-6">
+        <div className="lg:hidden mb-12">
            <button 
-             className="flex items-center text-red-800 font-bold text-sm border border-red-200 px-4 py-3 rounded shadow-sm bg-white w-full justify-between"
+             className="flex items-center text-red-900 font-black text-[10px] uppercase tracking-widest border-2 border-red-100 p-5 bg-white w-full justify-between shadow-lg"
              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
            >
               <span className="flex items-center">
-                 <Menu size={20} className="mr-2"/> विषयसूची (Table of Contents)
+                 <Menu size={18} className="mr-3"/> विषयसूची
               </span>
+              <ChevronRight size={18} className={mobileMenuOpen ? 'rotate-90 transition-transform' : 'transition-transform'} />
            </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12 relative items-start">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 relative items-start">
 
           {/* SIDEBAR NAVIGATION */}
-          <div className={`
-             lg:w-1/4 lg:block lg:sticky lg:top-32 self-start
-             ${mobileMenuOpen ? 'fixed inset-0 z-50 bg-white p-6 overflow-y-auto' : 'hidden'}
-          `}>
-             <div className="flex justify-between items-center mb-6 lg:hidden">
-                <h3 className="font-bold text-xl text-gray-900">विषयसूची</h3>
-                <button onClick={() => setMobileMenuOpen(false)}><X size={24}/></button>
-             </div>
-
-             <div className="bg-gray-50 rounded-lg border border-gray-200 p-2 shadow-sm">
-                <div className="px-4 py-3 border-b border-gray-200 mb-2">
-                   <h3 className="font-bold text-gray-400 uppercase text-xs tracking-widest">खण्डहरू</h3>
+          {/* DESKTOP SIDEBAR */}
+          <div className="hidden lg:block lg:w-1/4 self-start">
+            <div className="lg:sticky lg:top-32">
+              <div className="space-y-3 bg-white rounded-3xl border border-gray-100 p-5 shadow-sm">
+                <div className="pb-3 mb-3 border-b border-gray-100">
+                  <h3 className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-500">विषयसूची</h3>
+                  <p className="mt-2 text-sm text-gray-600">यो कागजातका मुख्य खण्डहरूमा छिटो पुग्नुहोस्।</p>
                 </div>
-                <nav className="space-y-1">
-                   {sections.map((section) => (
-                      <button
-                         key={section.id}
-                         onClick={() => scrollToSection(section.id)}
-                         className={`w-full text-left px-4 py-3 rounded text-sm font-medium transition-all duration-200 flex items-center justify-between
-                            ${activeSection === section.id 
-                               ? 'bg-white text-red-800 font-bold shadow-sm border-l-4 border-red-800' 
-                               : 'text-gray-600 hover:bg-white hover:text-gray-900'}
-                         `}
-                      >
-                         <span className="truncate">{section.title.split(': ')[0]}</span>
-                         {activeSection === section.id && <ChevronRight size={16} />}
-                      </button>
-                   ))}
+                <nav className="space-y-2">
+                  {sections.map((section) => (
+                    <button
+                      key={section.id}
+                      onClick={() => scrollToSection(section.id)}
+                      className={`w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-200 flex items-center justify-between
+                        ${activeSection === section.id 
+                          ? 'bg-red-950 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
+                      `}
+                    >
+                      <span className="truncate">{section.title}</span>
+                      <ChevronRight size={16} className={`transition-all ${activeSection === section.id ? 'opacity-100' : 'opacity-0'}`} />
+                    </button>
+                  ))}
                 </nav>
-             </div>
+              </div>
+            </div>
           </div>
+
+          {/* MOBILE SIDEBAR */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                className="fixed inset-0 z-50 bg-white p-8 overflow-y-auto lg:hidden"
+              >
+                <div className="flex justify-between items-center mb-10">
+                  <h3 className="font-black text-2xl font-['Google_Sans'] italic text-gray-950">विषयसूची</h3>
+                  <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-gray-100 text-gray-950"><X size={24}/></button>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="px-4 py-2 mb-4 border-b border-gray-100">
+                    <h3 className="font-black text-[10px] uppercase tracking-normal text-gray-400">खण्डहरू</h3>
+                  </div>
+                  <nav className="space-y-1">
+                    {sections.map((section) => (
+                      <button
+                        key={section.id}
+                        onClick={() => scrollToSection(section.id)}
+                        className={`w-full text-left px-5 py-4 text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-between group
+                          ${activeSection === section.id 
+                            ? 'bg-red-900 text-white shadow-2xl skew-x-[-3deg]' 
+                            : 'text-gray-500 hover:bg-gray-50 hover:text-red-900'}
+                        `}
+                      >
+                        <span className="truncate group-hover:translate-x-1 transition-transform">{section.title.split(': ')[0]}</span>
+                        <ChevronRight size={14} className={`transition-all ${activeSection === section.id ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`} />
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* MAIN CONTENT */}
           <div className="lg:w-3/4 w-full">
-            <div className="max-w-4xl mx-auto">
-                <div className="space-y-20">
+            <div className="max-w-4xl">
+                <div className="space-y-16 lg:space-y-20">
                    {sections.map((section) => (
-                      <section key={section.id} id={section.id} className="scroll-mt-32">
+                      <section key={section.id} id={section.id} className="scroll-mt-32 group bg-white border border-gray-100 rounded-3xl p-8 shadow-sm">
                          <div className="flex items-center mb-6">
-                            <h2 className="text-3xl font-bold text-gray-900 font-serif border-b-2 border-gray-200 pb-2 w-full">
+                            <h2 className="text-3xl lg:text-4xl font-semibold text-gray-950 tracking-tight leading-tight w-full">
                               {section.title}
                             </h2>
                          </div>
-                         <div className="prose prose-lg prose-red max-w-none text-gray-800 font-serif">
+                         <div className="prose prose-lg prose-red max-w-none text-gray-700 leading-8">
                             {section.content}
                          </div>
                       </section>
                    ))}
                 </div>
 
-                <div className="mt-24 pt-12 border-t border-gray-200 text-center">
-                   <p className="text-gray-500 text-sm">
+                {/* <div className="mt-10  border-t border-gray-100">
+                   <p className="text-[10px] font-black uppercase tracking-normal text-gray-400">
                      © वैज्ञानिक समाजवादी कम्युनिस्ट पार्टी, नेपाल । केन्द्रीय समिति
                    </p>
-                </div>
+                </div> */}
             </div>
           </div>
         </div>

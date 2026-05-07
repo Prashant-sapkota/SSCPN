@@ -8,7 +8,7 @@ const sections = [
     title: '१. परिभाषा र मूल पहिचान',
     content: (
       <div className="space-y-6 text-gray-800 leading-relaxed">
-        <p className="text-xl font-serif text-gray-900 leading-relaxed">
+        <p className="text-xl font-serif text-gray-900/50 leading-relaxed">
           वैज्ञानिक समाजवाद कुनै काल्पनिक सपना (Utopian Vision) होइन, बरु यो समाज विज्ञानका नियमका आधारमा बनाइने व्यवस्था हो।
         </p>
         
@@ -213,19 +213,42 @@ const BaigyanikSamajwadPage: React.FC = () => {
     <div className="bg-white min-h-screen font-sans">
       
       {/* 1. MASTHEAD */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-16">
-          <div className="flex flex-col items-center text-center">
-             <div className="flex items-center text-red-700 font-bold uppercase tracking-widest text-sm mb-4">
-                <Globe size={18} className="mr-2" />
-                <span>प्रशिक्षण सामग्री</span>
-             </div>
-             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 font-serif leading-tight mb-6">
-               वैज्ञानिक समाजवाद
-             </h1>
-             <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-4xl mx-auto text-justify md:text-center">
-               यो भूमण्डलीकृत पुँजीवाद र विश्वको उत्पादक शक्तिमा आएको परिवर्तनको व्यापक विश्लेषणमा आधारित वर्तमान युगको क्रान्तिको राजनीतिक कार्यदिशा हो।
-             </p>
+      <div className="bg-white from-white via-rose-50 to-gray-100 border-b border-gray-200">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-20">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center">
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 font-serif tracking-tight leading-tight">
+                  वैज्ञानिक <span className='text-red-900'>समाजवाद</span>
+                </h1>
+                <p className="mt-6 text-base md:text-lg text-gray-700 max-w-3xl leading-relaxed">
+                  यो भूमण्डलीकृत पुँंजीवाद र विश्वको उत्पादक शक्तिमा आएको परिवर्तनको व्यापक विश्लेषणमा आधारित वर्तमान युगको क्रान्तिको राजनीतिक कार्यदिशा हो।
+                </p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-3xl border border-gray-200 bg-red-900/10 p-6 shadow-sm">
+                  <p className="text-xs uppercase tracking-normal text-red-700 font-semibold mb-2">मुख्य फोकस</p>
+                  <p className="text-sm text-gray-700 leading-relaxed">वैज्ञानिक, आर्थिक, राजनीतिक र सांस्कृतिक परिवर्तनको समग्र रूपरेखा।</p>
+                </div>
+                <div className="rounded-3xl border border-gray-200 bg-red-900/10 p-6 shadow-sm">
+                  <p className="text-xs uppercase tracking-normal text-red-700 font-semibold mb-2">दिशा</p>
+                  <p className="text-sm text-gray-700 leading-relaxed">व्यावहारिक सिद्धान्त र समकालीन रणनीतिक समझदारी।</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-[2rem] border border-gray-200 bg-white/95 p-8 shadow-lg">
+              <div className="flex items-center gap-3 text-red-800 font-semibold mb-4">
+                <BookOpen size={22} />
+                <span>आजको अध्ययनक्रम</span>
+              </div>
+              <div className="space-y-3">
+                {sections.map(section => (
+                  <div key={section.id} className="rounded-3xl bg-red-50 p-4">
+                    <p className="text-sm font-semibold text-red-800">{section.title}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -249,31 +272,38 @@ const BaigyanikSamajwadPage: React.FC = () => {
           
           {/* SIDEBAR NAVIGATION */}
           <div className={`
-             lg:w-1/4 lg:block lg:sticky lg:top-32 self-start
+             lg:w-1/4 lg:block lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto self-start fade-in-up
              ${mobileMenuOpen ? 'fixed inset-0 z-50 bg-white p-6 overflow-y-auto' : 'hidden'}
           `}>
              <div className="flex justify-between items-center mb-6 lg:hidden">
-                <h3 className="font-bold text-xl text-gray-900">विषयसूची</h3>
-                <button onClick={() => setMobileMenuOpen(false)}><X size={24}/></button>
+                <div>
+                  <h3 className="font-bold text-xl text-gray-900">विषयसूची</h3>
+                  <p className="text-sm text-gray-500">शीर्षकहरू बीच सजिलै नेभिगेट गर्नुहोस्।</p>
+                </div>
+                <button className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200" onClick={() => setMobileMenuOpen(false)}><X size={24}/></button>
              </div>
 
-             <div className="bg-gray-50 rounded-lg border border-gray-200 p-2 shadow-sm">
-                <div className="px-4 py-3 border-b border-gray-200 mb-2">
-                   <h3 className="font-bold text-gray-400 uppercase text-xs tracking-widest">अध्यायहरू</h3>
+             <div className="rounded-[2rem] border border-gray-200 bg-white p-5 shadow-2xl shadow-gray-200/20">
+                <div className="mb-5">
+                   <h3 className="font-semibold text-gray-900 text-sm uppercase tracking-[0.26em]">विषय सूचि</h3>
+                   <p className="mt-2 text-sm text-gray-600">द्रुत रूपमा शीर्षकहरू बीच जानुहोस्।</p>
                 </div>
-                <nav className="space-y-1">
+                <nav className="space-y-2">
                    {sections.map((section) => (
                       <button
                          key={section.id}
                          onClick={() => scrollToSection(section.id)}
-                         className={`w-full text-left px-4 py-3 rounded text-sm font-medium transition-all duration-200 flex items-center justify-between
+                         className={`relative w-full text-left rounded-3xl px-10 py-3 text-sm font-medium transition-all duration-300 ease-out flex items-center justify-between
                             ${activeSection === section.id 
-                               ? 'bg-white text-red-800 font-bold shadow-sm border-l-4 border-red-800' 
-                               : 'text-gray-600 hover:bg-white hover:text-gray-900'}
+                               ? 'bg-red-50 text-red-900 shadow-sm ring-1 ring-red-100' 
+                               : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}
                          `}
                       >
                          <span className="truncate">{section.title}</span>
-                         {activeSection === section.id && <ChevronRight size={16} />}
+                         {activeSection === section.id && (
+                           <span className="absolute left-4 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-red-700 shadow-lg" />
+                         )}
+                         {activeSection === section.id && <ChevronRight size={16} className="text-red-700" />}
                       </button>
                    ))}
                 </nav>
@@ -286,29 +316,26 @@ const BaigyanikSamajwadPage: React.FC = () => {
                 
                 {/* Sections */}
                 <div className="space-y-24">
-                   {sections.map((section) => (
+                   {sections.map((section, index) => (
                       <section key={section.id} id={section.id} className="scroll-mt-32">
-                         <div className="flex items-center mb-8">
-                            <span className="bg-red-800 text-white p-2 rounded mr-4">
-                               <BookOpen size={20} />
-                            </span>
-                            <h2 className="text-3xl font-bold text-gray-900 font-serif border-b-2 border-gray-200 pb-2 w-full">
-                              {section.title.split('. ')[1]}
-                            </h2>
-                         </div>
-                         
-                         <div className="prose prose-lg prose-red max-w-none text-gray-800 font-serif">
-                            {section.content}
+                         <div className={`rounded-[2rem] border border-gray-200 bg-white/95 p-10 shadow-[0_20px_45px_-25px_rgba(0,0,0,0.15)] ${index % 2 === 0 ? 'fade-in-up' : 'slide-up'}`}>
+                            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8">
+                               <div className="flex items-center gap-4">
+                                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-800 text-white shadow-sm">
+                                     <BookOpen size={22} />
+                                  </span>
+                                  <div>
+                                     <p className="text-xs uppercase tracking-[0.3em] text-red-700 font-semibold mb-1">अध्याय</p>
+                                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-serif leading-tight">{section.title}</h2>
+                                  </div>
+                               </div>
+                            </div>
+                            <div className="prose prose-lg prose-red max-w-none text-gray-800 font-serif">
+                               {section.content}
+                            </div>
                          </div>
                       </section>
                    ))}
-                </div>
-
-                {/* Footer of the Book */}
-                <div className="mt-24 pt-12 border-t border-gray-200 text-center">
-                   <p className="text-gray-500 text-sm">
-                     © वैज्ञानिक समाजवादी कम्युनिस्ट पार्टी, नेपाल । प्रशिक्षण विभाग
-                   </p>
                 </div>
 
              </div>

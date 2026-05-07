@@ -1,137 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Calendar, CheckCircle2, AlertCircle, ArrowRight, ShieldAlert, ChevronDown, History } from 'lucide-react';
 
-const allCampaigns = [
-  {
-    id: 1,
-    title: "राष्ट्रिय औद्योगिक हड्ताल",
-    type: "ongoing", // ongoing, scheduled, completed
-    date: "१५ भदौ देखि निरन्तर",
-    location: "देशव्यापी (मुख्य केन्द्र: विराटनगर)",
-    image: "https://picsum.photos/seed/protest_worker/1200/600",
-    description: "सरकारले तोकेको न्यूनतम पारिश्रमिक कार्यान्वयन नभएको र श्रम ऐनको उल्लंघन भएको विरोधमा देशव्यापी अनिश्चितकालीन हड्ताल।",
-    demands: [
-      "न्यूनतम पारिश्रमिक रु. २५,००० कायम गर।",
-      "सामाजिक सुरक्षा कोष पूर्ण कार्यान्वयन गर।",
-      "निजीकरण गरिएका उद्योगहरू फिर्ता ल्याऊ।"
-    ]
-  },
-  {
-    id: 2,
-    title: "शिक्षामा निजीकरण विरुद्ध घेराउ",
-    type: "scheduled",
-    date: "२० भदौ, २०८१ (बिहान १०:००)",
-    location: "शिक्षा मन्त्रालय, सिंहदरबार",
-    image: "https://picsum.photos/seed/student_rally/800/600",
-    description: "सामुदायिक विद्यालयहरूलाई धराशायी बनाउने र निजी शिक्षा माफियालाई पोस्ने सरकारी नीति विरुद्ध विशाल घेराउ कार्यक्रम।",
-    demands: [
-      "शिक्षा विधेयक २०८१ खारेज गर।",
-      "निजी विद्यालयको शुल्क वृद्धि फिर्ता गर।",
-      "शिक्षक दरबन्दी तत्काल पूर्ति गर।"
-    ]
-  },
-  {
-    id: 3,
-    title: "महँगी विरुद्ध सिट्ठी जुलुस",
-    type: "ongoing",
-    date: "१६ भदौ देखि दैनिक",
-    location: "काठमाडौं उपत्यका",
-    image: "https://picsum.photos/seed/inflation_protest/800/600",
-    description: "दैनिक उपभोग्य वस्तु र पेट्रोलियम पदार्थको मूल्यवृद्धिको विरोधमा साझ ५ बजे दैनिक प्रदर्शन।",
-    demands: ["मूल्यवृद्धि फिर्ता गर", "कालोबजारी बन्द गर"]
-  },
-  {
-    id: 4,
-    title: "किसान पेन्सन अभियान",
-    type: "scheduled",
-    date: "२५ भदौ, २०८१",
-    location: "चितवन",
-    image: "https://picsum.photos/seed/farmer_rally/800/600",
-    description: "किसानहरूलाई पेन्सन र मलखादको ग्यारेन्टी माग गर्दै जिल्ला प्रशासन कार्यालय अगाडि धर्ना।",
-    demands: ["मलखाद समयमै उपलब्ध गराऊ", "किसान पेन्सन लागु गर"]
-  },
-  {
-    id: 5,
-    title: "अदालत मार्च",
-    type: "scheduled",
-    date: "३० भदौ, २०८१",
-    location: "रामशाहपथ",
-    image: "https://picsum.photos/seed/court_march/800/600",
-    description: "न्यायपालिकामा भएको भ्रष्टाचार र ढिलासुस्ती विरुद्ध खबरदारी मार्च।",
-    demands: ["भ्रष्ट न्यायाधीशलाई कारबाही गर", "निःशुल्क कानुनी सहायता लागु गर"]
-  },
-  // Past Events
-  {
-    id: 101,
-    title: "भूमिहीन सुकुम्बासी आन्दोलन",
-    type: "completed",
-    date: "०५ भदौ, २०८१",
-    location: "माइतीघर मण्डला",
-    image: "https://picsum.photos/seed/landless/800/600",
-    description: "लालपुर्जा वितरणमा भएको ढिलासुस्ती र उठिबास लगाउने प्रयास विरुद्ध १०,००० भूमिहीनहरूको शक्ति प्रदर्शन।",
-    demands: [
-      "भूमि आयोगको काम तत्काल सुरु गर।",
-      "बसोबासको ग्यारेन्टी बिना डोजर चलाउन बन्द गर।"
-    ]
-  },
-  {
-    id: 102,
-    title: "एमसीसी विरुद्ध प्रदर्शन",
-    type: "completed",
-    date: "१५ फागुन, २०८०",
-    location: "नयाँ बानेश्वर",
-    image: "https://picsum.photos/seed/mcc_protest/800/600",
-    description: "राष्ट्रघाती सम्झौताको विरोधमा भएको विशाल जनप्रदर्शन।",
-    demands: ["असमान सम्झौता खारेज गर"]
-  },
-  {
-    id: 103,
-    title: "नागरिकता विधेयक खारेजी अभियान",
-    type: "completed",
-    date: "१० असोज, २०८०",
-    location: "देशव्यापी",
-    image: "https://picsum.photos/seed/citizenship/800/600",
-    description: "विदेशीलाई सजिलै नागरिकता दिने प्रावधान विरुद्ध भएको शृंखलाबद्ध आन्दोलन।",
-    demands: ["नागरिकता विधेयक खारेज गर"]
-  },
-  {
-    id: 104,
-    title: "कालापानी मार्च",
-    type: "completed",
-    date: "२५ जेठ, २०८०",
-    location: "दार्चुला",
-    image: "https://picsum.photos/seed/border/800/600",
-    description: "सीमा अतिक्रमण विरुद्ध युवा संगठनले गरेको लामो मार्च।",
-    demands: ["भारतीय सेना कालापानी छोड"]
-  },
-  {
-    id: 105,
-    title: "कोभिड स्वास्थ्य सामाग्री भ्रष्टाचार विरुद्ध",
-    type: "completed",
-    date: "१५ असार, २०७७",
-    location: "बालुवाटार",
-    image: "https://picsum.photos/seed/covid_scam/800/600",
-    description: "महामारीको समयमा भएको औषधि खरिद भ्रष्टाचार विरुद्धको प्रदर्शन।",
-    demands: ["भ्रष्टाचारीलाई कारबाही गर"]
-  },
-  {
-    id: 106,
-    title: "गुठी विधेयक विरुद्ध आन्दोलन",
-    type: "completed",
-    date: "०४ असार, २०७६",
-    location: "माइतीघर",
-    image: "https://picsum.photos/seed/guthi/800/600",
-    description: "सांस्कृतिक सम्पदा मास्ने विधेयक विरुद्ध विशाल जनसागर।",
-    demands: ["गुठी विधेयक फिर्ता गर"]
+const STRAPI_URL = 'http://localhost:1337';
+
+interface Campaign {
+  id: number;
+  title: string;
+  type: string;
+  date: string;
+  location: string;
+  image: string;
+  description: string;
+  demands: string[];
+}
+
+const parseDemands = (raw: string): string[] => {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(`[${raw}]`);
+    if (Array.isArray(parsed)) return parsed.filter((d): d is string => typeof d === 'string' && d.trim() !== '');
+  } catch {}
+  if (raw.includes('", "')) {
+    return raw.split('", "').map(d => d.replace(/^"|"$/g, '').trim()).filter(Boolean);
   }
-];
+  return [raw.trim()].filter(Boolean);
+};
 
 const SangharshaPage: React.FC = () => {
+  const [allCampaigns, setAllCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(3);
   const [visiblePastCount, setVisiblePastCount] = useState(4);
 
+  useEffect(() => {
+    fetch(`${STRAPI_URL}/api/sangharshas?populate=*`)
+      .then(res => res.json())
+      .then(json => {
+        const campaigns: Campaign[] = (json.data ?? []).map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          type: item.type,
+          date: item.date,
+          location: item.location,
+          description: item.description,
+          demands: parseDemands(item.demands ?? ''),
+          image: item.image?.[0]?.url ? `${STRAPI_URL}${item.image[0].url}` : '',
+        }));
+        setAllCampaigns(campaigns);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
   // Separation Logic
-  const mainHero = allCampaigns.find(c => c.type === 'ongoing'); // Pick first ongoing as hero
+  const mainHero = allCampaigns.find(c => c.type === 'ongoing');
   const activeCampaigns = allCampaigns.filter(c => (c.type === 'ongoing' || c.type === 'scheduled') && c.id !== mainHero?.id);
   const pastCampaigns = allCampaigns.filter(c => c.type === 'completed');
 
@@ -156,25 +78,33 @@ const SangharshaPage: React.FC = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="bg-white min-h-screen font-['Google_Sans'] pt-20 flex items-center justify-center">
+        <div className="animate-pulse text-gray-400 text-lg">लोड हुँदैछ...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white min-h-screen pb-16">
+    <div className="bg-white min-h-screen font-['Google_Sans'] pt-20">
       
       {/* Page Header - Centered & Clean (Same theme as NewsPage) */}
-      <div className="bg-white">
+      <div className="bg-white font-['Google_Sans']">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-16">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-             <div className="flex items-center text-red-700 font-bold uppercase tracking-widest text-sm mb-4">
+             {/* <div className="flex items-center text-red-700 font-bold uppercase tracking-widest text-sm mb-4">
                 <ShieldAlert size={18} className="mr-2" />
                 <span>वर्ग संघर्षको मोर्चा</span>
-             </div>
-             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 font-serif leading-tight mb-6">
-               संघर्ष सम्बन्धि गतिविधि
+             </div> */}
+             <h1 className="text-2xl md:text-6xl font-bold text-gray-900 font-['Google_Sans'] leading-tight mb-6">
+               संघर्ष सम्बन्धि <span className='text-red-900'>गतिविधि</span>
              </h1>
           </div>
         </div>
       </div>
 
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 mt-12">
+      <div className="max-w-screen-2xl mx-auto px-2 sm:px-3 lg:px-6 2xl:px-8">
         
         {/* HERO: Main Ongoing Struggle (Preserved) */}
         {mainHero && (
@@ -204,7 +134,7 @@ const SangharshaPage: React.FC = () => {
                           <span className="flex items-center"><MapPin size={16} className="mr-2 text-red-600"/> {mainHero.location}</span>
                       </div>
                       
-                      <h3 className="text-4xl font-bold text-gray-900 mb-6 leading-tight font-serif">
+                      <h3 className="text-4xl font-bold text-gray-900 mb-6 leading-tight font-['Google_Sans']">
                           {mainHero.title}
                       </h3>
                       
@@ -240,18 +170,18 @@ const SangharshaPage: React.FC = () => {
             {/* Left: Active & Upcoming List */}
             <div className="lg:col-span-12">
                 <div className="flex items-center justify-between mb-8 border-b border-gray-300 pb-4">
-                    <h2 className="text-3xl font-bold text-gray-800 font-serif">जारी तथा आगामी कार्यक्रमहरू</h2>
+                    <h2 className="text-3xl font-bold text-gray-800 font-['Google_Sans']">जारी तथा आगामी कार्यक्रमहरू</h2>
                 </div>
 
                 <div className="space-y-8">
                     {activeCampaigns.slice(0, visibleCount).map((camp) => (
-                        <div key={camp.id} className="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-red-300 transition-all flex flex-col md:flex-row gap-6">
+                        <div key={camp.id} className="group relative bg-white text-slate-900 p-6 rounded-lg shadow-sm border border-gray-200 hover:border-red-300 transition-all duration-300 flex flex-col md:flex-row gap-6">
                             {/* Status Stripe */}
                             <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-lg ${camp.type === 'ongoing' ? 'bg-red-700' : 'bg-neutral-600'}`}></div>
                             
                             {/* Image Thumbnail */}
-                            <div className="w-full md:w-48 h-32 flex-shrink-0 overflow-hidden rounded bg-gray-100 border border-gray-200">
-                                <img src={camp.image} alt={camp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="w-full md:w-48 h-32 flex-shrink-0 overflow-hidden rounded bg-gray-100 border border-gray-200 group-hover:border-red-300 transition-colors duration-300">
+                                <img src={camp.image} alt={camp.title} className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" />
                             </div>
 
                             <div className="flex-1">
@@ -262,13 +192,13 @@ const SangharshaPage: React.FC = () => {
                                     </span>
                                 </div>
                                 
-                                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-800 transition-colors">
+                                <h3 className="text-xl font-bold text-gray-900 mb-2 transition-colors duration-300">
                                     {camp.title}
                                 </h3>
                                 <div className="flex items-center text-sm text-gray-500 mb-3">
                                     <MapPin size={14} className="mr-1 text-red-700"/> {camp.location}
                                 </div>
-                                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                                <p className="text-gray-600 text-sm mb-4 line-clamp-2 transition-colors duration-300">
                                     {camp.description}
                                 </p>
                             </div>
@@ -291,10 +221,10 @@ const SangharshaPage: React.FC = () => {
         </div>
 
         {/* SECTION: Archive / Past Struggles */}
-        <div className="mt-24 pt-12 border-t border-gray-300">
+        <div className="mt-12 pt-12 border-t border-gray-300">
            <div className="flex items-center mb-8">
               <History size={24} className="mr-3 text-gray-400" />
-              <h2 className="text-2xl font-bold text-gray-700 font-serif">संघर्ष अभिलेख (सम्पन्न कार्यक्रमहरू)</h2>
+              <h2 className="text-2xl font-bold text-gray-700 font-['Google_Sans']">संघर्ष अभिलेख (सम्पन्न कार्यक्रमहरू)</h2>
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
