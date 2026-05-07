@@ -1,134 +1,105 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, FileText, UserPlus } from 'lucide-react';
+import { UserPlus, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 
-const slides = [
-  {
-    id: 1,
-    image: "https://picsum.photos/seed/rally1/1920/1080",
-    title: "प्रतिरोध २.०",
-    subtitle: "साम्राज्यवाद र शोषण विरुद्ध एकताबद्ध अभियान।",
-    cta: "आन्दोलनमा सामेल हुनुहोस्",
-    link: "/membership"
-  },
-  {
-    id: 2,
-    image: "https://picsum.photos/seed/workers1/1920/1080",
-    title: "श्रमिक अधिकार नै मानव अधिकार हो",
-    subtitle: "उचित ज्याला, सम्मान र सामाजिक सुरक्षाका लागि संघर्ष।",
-    cta: "हाम्रो घोषणापत्र पढ्नुहोस्",
-    link: "/samajwadi-karyakram"
-  },
-  {
-    id: 3,
-    image: "https://picsum.photos/seed/study1/1920/1080", 
-    title: "आफ्नो इतिहास जान्नुहोस्",
-    subtitle: "हाम्रा राजनीतिक दस्तावेज र अभिलेखहरू अध्ययन गर्नुहोस्।",
-    cta: "राजनीतिक दस्तावेज डाउनलोड गर्नुहोस्",
-    ctaIcon: <FileText className="mr-2" size={20} />,
-    link: "/dastabeez",
-    isDownload: true
-  },
-  {
-    id: 4,
-    image: "https://picsum.photos/seed/community1/1920/1080",
-    title: "संगठन नै शक्ति हो",
-    subtitle: "उज्ज्वल भविष्य निर्माणका लागि हामीलाई तपाईंको खाँचो छ।",
-    cta: "सदस्य बन्नुहोस्",
-    ctaIcon: <UserPlus className="mr-2" size={20} />,
-    link: "/membership",
-    isMember: true
-  }
-];
-
-const HeroSlider: React.FC = () => {
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 6000); 
-    return () => clearInterval(interval);
-  }, []);
-
-  const nextSlide = () => {
-    setCurrent(current === slides.length - 1 ? 0 : current + 1);
-  };
-
-  const prevSlide = () => {
-    setCurrent(current === 0 ? slides.length - 1 : current - 1);
-  };
-
+const Hero: React.FC = () => {
   return (
-    <div className="relative w-full h-[600px] lg:h-[700px] overflow-hidden bg-black group">
-      {slides.map((slide, index) => (
-        <div
-          key={slide.id}
-          className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-            index === current ? 'opacity-100' : 'opacity-0'
-          }`}
+    <section className="relative w-full h-auto min-h-[500px] bg-white overflow-hidden flex flex-col md:flex-row">
+      
+      {/* 
+        COLUMN 1: Visual Side (Left)
+        - Takes up physical space in the flex row
+        - No absolute positioning used for the main structure to prevent overlap
+      */}
+      <div className="relative w-full md:w-[45%] lg:w-[50%] h-[50vw] sm:h-[45vw] md:h-full min-h-[225px] md:min-h-0 z-10 shrink-0">
+        <motion.div 
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full h-full relative overflow-hidden bg-red-700"
+          style={{
+            // The Slash: Sharp bottom-right cut
+            clipPath: 'polygon(0 0, 100% 0, 82% 100%, 0% 100%)'
+          }}
         >
-          {/* Enhanced Gradient Overlay for better text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div> 
           <img 
-            src={slide.image} 
-            alt={slide.title} 
-            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1600" 
+            alt="The Mission" 
+            className="w-full h-full object-cover grayscale brightness-90 hover:grayscale-0 transition-all duration-[2s]"
+            referrerPolicy="no-referrer"
           />
-          
-          <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 sm:px-12 lg:px-24 max-w-screen-2xl mx-auto w-full">
-            <div className="max-w-3xl animate-fade-in-up">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-5 uppercase tracking-normal drop-shadow-xl font-serif leading-none">
-                {slide.title}
-                </h1>
-                <p className="text-lg md:text-xl lg:text-2xl text-gray-200 mb-8 max-w-2xl drop-shadow-lg font-light leading-relaxed border-l-4 border-red-600 pl-5">
-                {slide.subtitle}
-                </p>
-                <Link 
-                to={slide.link}
-                className={`
-                  inline-flex items-center px-7 py-3.5 text-base font-bold uppercase tracking-wide rounded-sm transition-all transform hover:translate-x-1 shadow-xl border
-                    ${slide.isMember 
-                        ? 'bg-yellow-500 border-yellow-500 text-red-900 hover:bg-yellow-400' 
-                        : 'bg-red-700 border-red-700 text-white hover:bg-transparent hover:text-white'}
-                `}
-                >
-                {slide.ctaIcon}
-                {slide.cta}
-                </Link>
-            </div>
-          </div>
-        </div>
-      ))}
-
-      {/* Controls */}
-      <button 
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-white/10 hover:bg-red-700 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm border border-white/20"
-      >
-        <ChevronLeft size={32} />
-      </button>
-      <button 
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-white/10 hover:bg-red-700 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm border border-white/20"
-      >
-        <ChevronRight size={32} />
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex space-x-3">
-        {slides.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrent(idx)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              idx === current ? 'bg-red-600 w-12' : 'bg-white/50 w-6 hover:bg-white'
-            }`}
-          />
-        ))}
+          {/* Tone Overlay */}
+          <div className="absolute inset-0 bg-red-900/10 mix-blend-multiply" />
+        </motion.div>
       </div>
-    </div>
+
+      {/* 
+        COLUMN 2: Content Side (Right)
+        - Naturally follows the first column
+        - Uses padding to respect the diagonal angle without overlapping
+      */}
+      <div className="relative flex-grow h-full z-20 flex flex-col justify-center bg-white">
+        
+        {/* Background Decorative Outlined Text */}
+        {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 opacity-[0.03] select-none pointer-events-none">
+          <h2 className="text-[100px] md:text-[150px] lg:text-[300px] font-black text-outline uppercase tracking-tighter text-black">
+          SSCPN 
+          </h2>
+        </div> */}
+
+        <motion.div
+           initial={{ opacity: 0, scale: 0.95 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ duration: 0.8, delay: 0.4 }}
+           className="relative z-10 w-full px-6 sm:px-12 md:pl-12 lg:pl-20 py-10"
+        >
+          {/* Accent Line */}
+          <div className="w-12 h-1.5 bg-red-700 mb-6 lg:mb-10" />
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[90px] font-black text-gray-900 leading-[0.9] lg:leading-[0.82] tracking-tighter uppercase mb-6 lg:mb-10 italic">
+            परिवर्तन <br />
+            <span className="text-red-700">अनिवार्य छ</span>
+          </h1>
+          
+          <p className="text-2xl sm:text-5xl md:text-7xl lg:text-9xl text-gray-500 font-medium leading-relaxed mb-8 lg:mb-12 border-l-4 border-red-700 pb-1 pl-6 lg:pl-8 max-w-xl">
+            साम्राज्यवाद र शोषण विरूद्धको यो यात्रामा हामी एक हौं। हामी नयाँ भविष्यको सपना होइन, निर्माण गर्दैछौं।
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 lg:gap-6">
+            <Link 
+              to="/membership"
+              className="group relative flex items-center justify-center gap-3 lg:gap-4 bg-red-700 text-white px-8 lg:px-12 py-4 lg:py-6 rounded-sm font-black text-base lg:text-xl shadow-xl transition-all hover:bg-red-800 hover:-translate-y-1 active:scale-95"
+            >
+              <UserPlus size={20} className="lg:w-6 lg:h-6" />
+              सदस्य बन्नुहोस्
+            </Link>
+
+            <Link 
+              to="/about"
+              className="flex items-center justify-center gap-3 bg-white text-gray-900 border-2 border-gray-900 px-8 lg:px-10 py-4 lg:py-5 rounded-sm font-black text-base lg:text-lg transition-all hover:bg-gray-900 hover:text-white"
+            >
+              हाम्रो बारेमा
+              <ArrowRight size={20} className="lg:w-6 lg:h-6" />
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* Diagonal Corner Blade (Right bottom) */}
+        <div 
+          className="absolute bottom-0 right-0 w-1/4 h-24 bg-red-700/10 pointer-events-none z-0 hidden lg:block"
+          style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }}
+        />
+      </div>
+
+      {/* Decorative Rail Detail */}
+      <div className="absolute right-8 bottom-8 hidden lg:block z-30">
+        {/* <p className="vertical-text text-gray-200 font-black tracking-[1em] text-[10px] uppercase">
+          SSCPN • SSCPN • SSCPN
+        </p> */}
+      </div>
+    </section>
   );
 };
 
-export default HeroSlider;
+export default Hero;
