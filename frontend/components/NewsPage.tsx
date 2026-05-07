@@ -141,7 +141,7 @@ const NewsPage: React.FC = () => {
                 <Newspaper size={18} className="mr-2" />
                 <span>आधिकारिक सूचना पोर्टल</span>
              </div>
-             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 font-serif leading-tight mb-8">
+             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 font-['Google_Sans'] leading-tight mb-8">
                पार्टी समाचार कक्ष
              </h1>
              <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto font-light">
@@ -237,7 +237,7 @@ const NewsPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 leading-snug group-hover:text-red-800 transition-colors font-serif">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 leading-snug group-hover:text-red-800 transition-colors font-['Google_Sans']">
                     {item.title}
                   </h3>
                   
