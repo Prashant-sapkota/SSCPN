@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, Search, Home, ChevronDown } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -18,8 +17,20 @@ interface NavItem {
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isSticky, setIsSticky] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (headerRef.current) {
+        setIsSticky(window.scrollY > headerRef.current.offsetHeight);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -30,7 +41,7 @@ const Navbar: React.FC = () => {
   const navItems: NavItem[] = [
     { 
       name: 'गृहमुख', 
-      icon: <Home size={18} />, 
+      icon: <Home size={25} />, 
       path: '/'
     },
     { 
@@ -92,14 +103,14 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full font-serif shadow-sm bg-white z-50">
-      {/* Minimal Header Section */}
-      <div className="bg-white w-full relative pt-8 pb-8 border-b border-gray-100">
+    <>
+      {/* Minimal Header Section - This will scroll away naturally */}
+      <div ref={headerRef} className="bg-white w-full border-b border-gray-100 relative z-30 pt-4 pb-4 md:pt-6 md:pb-6">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex justify-between md:justify-center items-center gap-4 md:gap-8 lg:gap-12">
             
             {/* Left Flag - Green Scientific Socialist Flag */}
-            <div className="hidden md:block w-32 lg:w-40 xl:w-48 cursor-pointer flex-shrink-0" onClick={() => handleNavigate('/')}>
+            <div className="hidden md:block w-24 lg:w-32 xl:w-40 cursor-pointer flex-shrink-0" onClick={() => handleNavigate('/')}>
               <img 
                 src="https://i.imghippo.com/files/NmZa4274WM.png" 
                 alt="Green Party Flag" 
@@ -109,17 +120,16 @@ const Navbar: React.FC = () => {
 
             {/* Center Content: Logo & Name */}
             <div className="flex flex-col items-center text-center cursor-pointer px-2 flex-grow" onClick={() => handleNavigate('/')}>
-
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-alkatra font-bold leading-tight text-[#b90000] drop-shadow-sm tracking-wide">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-alkatra font-bold leading-tight text-[#b90000] drop-shadow-sm tracking-wide">
                 वैज्ञानिक समाजवादी <br className="md:hidden" /> कम्युनिस्ट पार्टी, नेपाल
               </h1>
-              <span className="text-xs md:text-base lg:text-lg font-sans font-medium text-gray-500 mt-3 uppercase tracking-[0.2em] border-t border-gray-200 pt-2">
+              <span className="text-1xl md:text-2xl lg:text-3xl font-alkatra font-bold leading-tight text-black drop-shadow-sm tracking-wide">
                 Scientific Socialist Communist Party, Nepal
               </span>
             </div>
 
             {/* Right Flag - Red Communist Flag */}
-            <div className="hidden md:block w-32 lg:w-40 xl:w-48 cursor-pointer flex-shrink-0" onClick={() => handleNavigate('/')}>
+            <div className="hidden md:block w-24 lg:w-32 xl:w-40 cursor-pointer flex-shrink-0" onClick={() => handleNavigate('/')}>
               <img 
                 src="https://i.imghippo.com/files/QObu9356OSg.png" 
                 alt="Red Flag" 
@@ -131,10 +141,11 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 bg-[#b90000] text-white shadow-lg border-t-2 border-red-900">
+      {isSticky && <div className="h-12 md:h-14" />}
+      {/* Navigation Bar - Fixed Sticky Position */}
+      <nav className={`${isSticky ? 'fixed top-0 left-0 right-0' : 'relative'} z-50 bg-[#b90000] text-white shadow-lg border-t-2 border-red-900 w-full`}>
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12">
-          <div className="flex justify-between items-center h-14">
+          <div className="flex justify-between items-center h-12 md:h-14">
             
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center space-x-1 w-full justify-center h-full">
@@ -144,7 +155,7 @@ const Navbar: React.FC = () => {
                     onClick={() => {
                       if (item.path) handleNavigate(item.path);
                     }}
-                    className={`flex items-center px-4 xl:px-5 h-full hover:bg-red-900 transition-colors text-base font-bold tracking-wide whitespace-nowrap border-b-4 border-transparent hover:border-white ${isItemActive(item) ? 'bg-red-900 border-white' : ''}`}
+                    className={`flex items-center px-4 xl:px-5 h-full hover:bg-red-900 transition-colors text-sm xl:text-base font-bold tracking-wide whitespace-nowrap border-b-4 border-transparent hover:border-white ${isItemActive(item) ? 'bg-red-900 border-white' : ''}`}
                   >
                     {item.icon && <span className="mr-2">{item.icon}</span>}
                     {item.name}
@@ -152,7 +163,7 @@ const Navbar: React.FC = () => {
                   </button>
                   {/* Dropdown Menu */}
                   {item.submenu && (
-                    <div className={`absolute top-14 left-0 bg-white text-gray-800 shadow-2xl rounded-b-lg hidden group-hover:block border-t-4 border-red-800 animate-fade-in-up ${item.submenu.length > 5 ? 'w-80' : 'w-72'}`}>
+                    <div className={`absolute top-full left-0 bg-white text-gray-800 shadow-2xl rounded-b-lg hidden group-hover:block border-t-4 border-red-800 animate-fade-in-up transition-all ${item.submenu.length > 5 ? 'w-80' : 'w-72'}`}>
                       {item.submenu.map((subItem, subIndex) => (
                         <button
                           key={subIndex} 
@@ -179,7 +190,7 @@ const Navbar: React.FC = () => {
             </div>
              {/* Desktop Search Icon */}
              <div className="hidden lg:block absolute right-4 xl:right-8">
-                  <button className="p-2 hover:bg-red-900 rounded-full transition-colors text-red-100 hover:text-white" onClick={() => handleNavigate('/news')}>
+                  <button className="p-2 hover:bg-red-900 rounded-full transition-colors text-red-100 hover:text-white" onClick={() => handleNavigate('/search')}>
                     <Search size={22} />
                  </button>
              </div>
@@ -236,7 +247,7 @@ const Navbar: React.FC = () => {
           </div>
         )}
       </nav>
-    </div>
+    </>
   );
 };
 
