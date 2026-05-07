@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -26,6 +25,7 @@ import BigyanPrabidhiPage from './components/BigyanPrabidhiPage';
 import GalleryPage from './components/GalleryPage';
 import SamajwadiKaryakramPage from './components/SamajwadiKaryakramPage';
 import NaraPage from './components/NaraPage';
+import PressDetailPage from './components/PressDetailPage';
 
 const HomePage: React.FC = () => (
   <div className="home-page">
@@ -56,7 +56,7 @@ const ScrollToTop: React.FC = () => {
 const App: React.FC = () => {
 
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-900 selection:bg-red-200 flex flex-col">
+<div className="min-h-screen bg-white font-sans text-neutral-900 selection:bg-red-200 flex flex-col overflow-x-hidden">
       <ScrollToTop />
       <Navbar />
 
@@ -88,6 +88,7 @@ const App: React.FC = () => {
           <Route path="/bigyan-prabidhi" element={<BigyanPrabidhiPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/nara" element={<NaraPage />} />
+          <Route path="/press/:id" element={<PressDetailPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
@@ -95,7 +96,6 @@ const App: React.FC = () => {
       <div id="contact" className="mt-auto">
         <Footer />
       </div>
-      
     </div>
   );
 };
