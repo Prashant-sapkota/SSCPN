@@ -1,12 +1,13 @@
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, MapPin, Clock, Calendar as CalendarIcon } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, MapPin, Clock } from 'lucide-react';
 
-// --- Types ---
+const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337';
+
 interface CalendarEvent {
   id: string;
-  day: number; // Nepali Day
-  monthIndex: number; // 0 = Baisakh, 4 = Bhadra
+  day: number;
+  monthIndex: number;
   title: string;
   location: string;
   time: string;
@@ -14,91 +15,70 @@ interface CalendarEvent {
   type: 'meeting' | 'rally' | 'training' | 'other';
 }
 
-// --- Mock Data ---
-// Assuming current view is Bhadra (Month Index 4)
-const eventData: CalendarEvent[] = [
-  {
-    id: 'evt-1',
-    day: 5,
-    monthIndex: 4, // Bhadra
-    title: 'केन्द्रीय सचिवालय बैठक',
-    location: 'केन्द्रीय कार्यालय, पेरिसडाँडा',
-    time: '११:०० बिहान',
-    description: 'पार्टीको आगामी कार्यदिशा र संगठन विस्तार अभियान बारे छलफल।',
-    type: 'meeting'
-  },
-  {
-    id: 'evt-2',
-    day: 12,
-    monthIndex: 4,
-    title: 'विशाल जनसभा',
-    location: 'खुलामञ्च, काठमाडौं',
-    time: '१:०० दिउँसो',
-    description: 'महँगी र भ्रष्टाचार विरुद्ध खबरदारी सभा। प्रमुख वक्ता: महासचिव कमरेड।',
-    type: 'rally'
-  },
-  {
-    id: 'evt-3',
-    day: 15,
-    monthIndex: 4,
-    title: 'प्रशिक्षण कार्यक्रम',
-    location: 'प्रज्ञा भवन, कमलादी',
-    time: '१०:०० बिहान',
-    description: 'नयाँ संगठित सदस्यहरूका लागि आधारभूत मार्क्सवादी प्रशिक्षण।',
-    type: 'training'
-  },
-  {
-    id: 'evt-4',
-    day: 22,
-    monthIndex: 4,
-    title: 'विद्यार्थी संगठनको भेला',
-    location: 'त्रिभुवन विश्वविद्यालय',
-    time: '२:०० दिउँसो',
-    description: 'स्वतन्त्र विद्यार्थी युनियन निर्वाचन तयारी विशेष भेला।',
-    type: 'other'
-  },
-  {
-    id: 'evt-5',
-    day: 28,
-    monthIndex: 4,
-    title: 'संविधान दिवस अन्तर्क्रिया',
-    location: 'नेपाल ल क्याम्पस',
-    time: '३:०० दिउँसो',
-    description: 'संविधानका सबल पक्ष र कमजोरीहरू माथि बौद्धिक विमर्श।',
-    type: 'meeting'
-  }
-];
+interface StrapiCalendarItem {
+  id: number;
+  documentId?: string;
+  day: number;
+  monthIndex: number;
+  title: string;
+  location: string;
+  time: string;
+  description: string;
+  type: 'meeting' | 'rally' | 'training' | 'other';
+}
 
-// Helper to convert English numbers to Nepali
 const toNepaliDigits = (num: number): string => {
   return num.toString().replace(/\d/g, (d) => "०१२३४५६७८९"[parseInt(d)]);
 };
 
 const CalendarPage: React.FC = () => {
-  // 4 = Bhadra (approx Sept)
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(4); 
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(4);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  
-  // Refs for scrolling
+  const [allEvents, setAllEvents] = useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const eventListRef = useRef<HTMLDivElement>(null);
-  const eventRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const eventRefs = useRef<Map<number, HTMLElement>>(new Map());
 
   const nepaliMonths = [
     "बैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज",
     "कार्तिक", "मंसिर", "पुस", "माघ", "फागुन", "चैत"
   ];
 
-  const prevMonth = () => setCurrentMonthIndex(prev => (prev === 0 ? 11 : prev - 1));
-  const nextMonth = () => setCurrentMonthIndex(prev => (prev === 11 ? 0 : prev + 1));
+  useEffect(() => {
+    fetch(`${STRAPI_URL}/api/calanders?populate=*&sort=day:asc`)
+      .then(res => res.json())
+      .then(data => {
+        const items: CalendarEvent[] = (data.data ?? []).map((item: StrapiCalendarItem) => ({
+          id: String(item.id),
+          day: item.day,
+          monthIndex: item.monthIndex,
+          title: item.title,
+          location: item.location,
+          time: item.time,
+          description: item.description,
+          type: item.type,
+        }));
+        setAllEvents(items);
+      })
+      .catch(() => setAllEvents([]))
+      .finally(() => setLoading(false));
+  }, []);
 
-  // --- Interaction Handlers ---
+  const events = allEvents.filter(e => e.monthIndex === currentMonthIndex);
 
-  // 1. Click Date -> Scroll to Event
+  const prevMonth = () => {
+    setSelectedDay(null);
+    setCurrentMonthIndex(prev => (prev === 0 ? 11 : prev - 1));
+  };
+  const nextMonth = () => {
+    setSelectedDay(null);
+    setCurrentMonthIndex(prev => (prev === 11 ? 0 : prev + 1));
+  };
+
   const handleDateClick = (day: number) => {
     setSelectedDay(day);
-    // Find index of event for this day
-    const eventIndex = eventData.findIndex(e => e.day === day && e.monthIndex === currentMonthIndex);
-    
+    const eventIndex = events.findIndex(e => e.day === day);
     if (eventIndex !== -1) {
       const element = eventRefs.current.get(eventIndex);
       if (element) {
@@ -107,25 +87,22 @@ const CalendarPage: React.FC = () => {
     }
   };
 
-  // 2. Click Event Card -> Highlight Date
   const handleEventCardClick = (day: number, index: number) => {
     setSelectedDay(day);
     const element = eventRefs.current.get(index);
     if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
-  // 3. Intersection Observer to detect scroll position
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = Number(entry.target.getAttribute('data-index'));
-            const event = eventData[index];
-            if (event && event.monthIndex === currentMonthIndex) {
-              // Only update if not currently clicking (optional debouncing could occur here)
+            const event = events[index];
+            if (event) {
               setSelectedDay(event.day);
             }
           }
@@ -133,7 +110,7 @@ const CalendarPage: React.FC = () => {
       },
       {
         root: eventListRef.current,
-        threshold: 0.6, // Trigger when 60% of the card is visible
+        threshold: 0.6,
       }
     );
 
@@ -147,27 +124,23 @@ const CalendarPage: React.FC = () => {
         if (node) observer.unobserve(node);
       });
     };
-  }, [currentMonthIndex]);
+  }, [currentMonthIndex, events]);
 
-
-  // Render Calendar Grid (Simulated for Bhadra - 31 Days)
   const renderCalendarDays = () => {
     const days = [];
-    const daysInMonth = 31; 
-    const startDay = 3; 
+    const daysInMonth = 31;
+    const startDay = 3;
 
-    // Empty slots
     for (let i = 0; i < startDay; i++) {
       days.push(<div key={`empty-${i}`} className="aspect-square border-b border-r border-gray-100 bg-transparent"></div>);
     }
 
-    // Actual Days
     for (let day = 1; day <= daysInMonth; day++) {
-      const hasEvent = eventData.find(e => e.day === day && e.monthIndex === currentMonthIndex);
+      const hasEvent = events.find(e => e.day === day);
       const isSelected = selectedDay === day;
 
       days.push(
-        <div 
+        <div
           key={day}
           onClick={() => handleDateClick(day)}
           className={`
@@ -175,10 +148,9 @@ const CalendarPage: React.FC = () => {
             ${isSelected ? 'bg-red-800 text-white z-10' : 'bg-white hover:bg-gray-50 text-gray-700'}
           `}
         >
-          <span className={`text-sm md:text-lg font-bold`}>
+          <span className="text-sm md:text-lg font-bold">
             {toNepaliDigits(day)}
           </span>
-          
           {hasEvent && !isSelected && (
             <div className="absolute bottom-2 w-1.5 h-1.5 rounded-full bg-red-600"></div>
           )}
@@ -189,127 +161,119 @@ const CalendarPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen pb-16">
-      {/* Header */}
+    <div className="bg-white min-h-screen pt-20 pb-10">
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-12">
-          <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-             <div className="flex items-center text-red-700 font-bold uppercase tracking-widest text-sm mb-3">
-                <CalendarIcon size={18} className="mr-2" />
-                <span>पार्टी तालिका</span>
-             </div>
-             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 font-serif leading-tight">
-               कार्यक्रम क्यालेन्डर
-             </h1>
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-10">
+          <div className="flex flex-col items-center text-center max-w-5xl mx-auto gap-4">
+            <h1 className="text-4xl md:text-5xl font-semibold text-gray-950 tracking-tight leading-tight">
+              कार्यक्रम <span className="text-red-900">क्यालेन्डर</span>
+            </h1>
+            <p className="text-base md:text-lg text-gray-600 max-w-2xl leading-relaxed">
+              प्रमुख संगठनात्मक गतिविधिहरू र महत्वपूर्ण बैठकहरूलाई एक सुविधाजनक दृश्यमा व्यवस्थापन गर्नुहोस्।
+            </p>
           </div>
         </div>
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 mt-8">
-        
-        {/* Layout Container - height auto to fit square calendar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 h-auto">
-          
-          {/* LEFT: CALENDAR (60% Width - col-span-7) */}
-          <div className="lg:col-span-7 flex flex-col h-fit bg-white border-2 border-gray-800 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            {/* Calendar Controls */}
-            <div className="flex items-center justify-between p-4 bg-red-800 text-white">
-              <button onClick={prevMonth} className="hover:bg-red-700 p-2 rounded"><ChevronLeft size={24} /></button>
-              <h2 className="text-2xl font-bold font-serif tracking-wide">
-                {nepaliMonths[currentMonthIndex]} २०८१
-              </h2>
-              <button onClick={nextMonth} className="hover:bg-red-700 p-2 rounded"><ChevronRight size={24} /></button>
+        <div className="grid gap-8 lg:grid-cols-[1.35fr_0.9fr]">
+
+          {/* CALENDAR PANEL */}
+          <div className="bg-white border border-gray-200 rounded-[28px] shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between bg-red-900 px-5 py-4 text-white">
+              <button onClick={prevMonth} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 transition hover:bg-white/20">
+                <ChevronLeft size={20} />
+              </button>
+              <div className="text-center">
+                <p className="text-xs uppercase tracking-[0.3em] text-red-200">अहिले</p>
+                <h2 className="text-2xl md:text-3xl font-semibold font-['Google_Sans']">{nepaliMonths[currentMonthIndex]} २०८१</h2>
+              </div>
+              <button onClick={nextMonth} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 transition hover:bg-white/20">
+                <ChevronRight size={20} />
+              </button>
             </div>
 
-            {/* Weekdays */}
-            <div className="grid grid-cols-7 bg-gray-100 border-b border-gray-200">
+            <div className="grid grid-cols-7 divide-x divide-gray-200 bg-gray-50 text-[12px] font-semibold uppercase tracking-[0.18em] text-gray-500">
               {['आइत', 'सोम', 'मंगल', 'बुध', 'बिही', 'शुक्र', 'शनि'].map(day => (
-                <div key={day} className="py-3 text-center text-sm font-bold text-gray-600 border-r border-gray-200 last:border-0">
+                <div key={day} className="py-3 text-center">
                   {day}
                 </div>
               ))}
             </div>
 
-            {/* Grid */}
             <div className="grid grid-cols-7 bg-white">
               {renderCalendarDays()}
             </div>
-            
-            <div className="p-3 bg-gray-50 text-xs text-center border-t border-gray-200 text-gray-500">
-               मितिमा क्लिक गरी विवरण हेर्नुहोस्
+
+            <div className="flex flex-wrap gap-3 px-5 py-4 bg-red-100/30 border-t border-gray-200">
+              <span className="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-2 text-xs font-semibold text-red-800">
+                <span className="h-2 w-2 rounded-full bg-red-900" /> कार्यक्रम मिति
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 text-xs font-semibold text-gray-700">
+                <span className="h-2 w-2 rounded-full bg-gray-400" /> खुला मिति
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 text-xs font-semibold text-gray-700">
+                <span className="h-2 w-2 rounded-full bg-red-200" /> चयन गरिएको दिन
+              </span>
             </div>
           </div>
 
-          {/* RIGHT: EVENT VERTICAL SLIDER (40% Width - col-span-5) */}
-          <div className="lg:col-span-5 relative pl-4 border-l-2 border-gray-100 h-[500px] lg:h-full">
-             <div className="absolute top-0 left-0 bottom-0 w-1 bg-gray-100"></div>
-             
-             {/* Scroll Container */}
-             <div 
-                ref={eventListRef}
-                className="h-full overflow-y-auto scroll-smooth py-4 px-2 space-y-6 no-scrollbar snap-y snap-mandatory"
-             >
-                {eventData.map((event, idx) => (
-                  <div 
-                    key={event.id} 
-                    ref={(el) => { if (el) eventRefs.current.set(idx, el); }}
-                    data-index={idx}
-                    className="snap-center transition-all duration-300"
-                    onClick={() => handleEventCardClick(event.day, idx)}
-                  >
-                    <div className={`
-                      bg-white p-6 border-2 relative ml-6 transition-all duration-300 cursor-pointer rounded-sm
-                      ${selectedDay === event.day ? 'border-red-800 shadow-[6px_6px_0px_0px_#991b1b] scale-[1.02] z-10' : 'border-gray-200 hover:border-gray-400 opacity-60 hover:opacity-100'}
-                    `}>
-                       {/* Timeline Dot */}
-                       <div className={`
-                         absolute top-1/2 -translate-y-1/2 -left-[33px] w-4 h-4 rounded-full border-2 border-white z-20
-                         ${selectedDay === event.day ? 'bg-red-800 ring-2 ring-red-800' : 'bg-gray-300'}
-                       `}></div>
+          {/* EVENTS PANEL */}
+          <div className="space-y-6">
+            <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-500 font-semibold">महत्त्वपूर्ण घटनाहरू</p>
+                  <h3 className="mt-3 text-2xl font-semibold text-gray-950">आजका प्रमुख कार्यक्रमहरू</h3>
+                </div>
+                <div className="rounded-3xl bg-red-50 px-4 py-2 text-sm font-semibold text-red-900">
+                  क्लिक गर्नुहोस्
+                </div>
+              </div>
+              <p className="mt-4 text-sm text-gray-600 leading-relaxed">
+                कुनै पनि मितिमा क्लिक गर्दा सम्बन्धित घटना सूचीमा तल स्क्रोल हुन्छ र सजिलै पढ्न सकिने रूपमा चयन हुन्छ।
+              </p>
+            </div>
 
-                       {/* Connector Line to Dot */}
-                       <div className={`
-                         absolute top-1/2 -translate-y-1/2 -left-[24px] w-[24px] h-[2px] z-10
-                         ${selectedDay === event.day ? 'bg-red-800' : 'bg-transparent'}
-                       `}></div>
-
-                       <div className="flex justify-between items-start mb-3">
-                          <span className="bg-red-50 text-red-800 font-bold px-3 py-1 text-sm border border-red-100">
-                             {nepaliMonths[event.monthIndex]} {toNepaliDigits(event.day)}
-                          </span>
-                          <span className="text-xs font-bold text-gray-400 uppercase border border-gray-200 px-2 py-1">
-                             {event.type}
-                          </span>
-                       </div>
-
-                       <h3 className="text-2xl font-bold text-gray-900 mb-2 font-serif">
-                          {event.title}
-                       </h3>
-                       
-                       <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-gray-600 mb-4">
-                          <span className="flex items-center"><Clock size={16} className="mr-2 text-red-700"/> {event.time}</span>
-                          <span className="flex items-center"><MapPin size={16} className="mr-2 text-red-700"/> {event.location}</span>
-                       </div>
-
-                       <p className="text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
-                          {event.description}
-                       </p>
+            <div ref={eventListRef} className="space-y-4">
+              {loading && (
+                <p className="text-center text-gray-400 py-8">लोड हुँदैछ...</p>
+              )}
+              {!loading && events.length === 0 && (
+                <p className="text-center text-gray-400 py-8">यस महिनामा कुनै कार्यक्रम छैन।</p>
+              )}
+              {events.map((event, idx) => (
+                <button
+                  key={event.id}
+                  ref={(el) => { if (el) eventRefs.current.set(idx, el); }}
+                  data-index={idx}
+                  onClick={() => handleEventCardClick(event.day, idx)}
+                  className={`w-full text-left rounded-[28px] border p-6 transition duration-300 ease-out ${selectedDay === event.day ? 'border-red-900 bg-red-50 shadow-lg' : 'border-gray-200 bg-white hover:border-red-800 hover:shadow-lg'}`}
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-normal text-red-900 font-semibold mb-2">{nepaliMonths[event.monthIndex]} {toNepaliDigits(event.day)}</p>
+                      <h4 className="text-xl font-semibold text-gray-950 leading-tight">{event.title}</h4>
+                    </div>
+                    <div className="rounded-3xl bg-white/80 px-3 py-2 text-xs font-semibold text-gray-600 border border-gray-200">
+                      {event.type.toUpperCase()}
                     </div>
                   </div>
-                ))}
 
-                {/* Spacer at bottom to allow last item to scroll to center */}
-                <div className="h-[200px]"></div>
-             </div>
-             
-             {/* Slider Navigation Hints */}
-             <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 pointer-events-none">
-                 <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-                 <div className="w-1.5 h-1.5 rounded-full bg-red-800"></div>
-                 <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-             </div>
+                  <div className="grid gap-3 sm:grid-cols-2 text-sm text-gray-600 mb-4">
+                    <span className="inline-flex items-center gap-2">
+                      <Clock size={16} className="text-red-700" /> {event.time}
+                    </span>
+                    <span className="inline-flex items-center gap-2">
+                      <MapPin size={16} className="text-red-700" /> {event.location}
+                    </span>
+                  </div>
+
+                  <p className="text-gray-700 leading-7">{event.description}</p>
+                </button>
+              ))}
+            </div>
           </div>
-
         </div>
       </div>
     </div>
